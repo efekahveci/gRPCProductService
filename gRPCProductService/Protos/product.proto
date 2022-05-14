@@ -1,0 +1,38 @@
+syntax = "proto3";
+package ProductProto;
+
+service Product {
+
+	rpc SearchProducts (SearchRequest) returns (stream ProductModel);
+	rpc GetAllProducts (GetAllRequest) returns (ProductResponse);
+	rpc GetProduct (GetProductsRequest) returns (ProductModel);
+
+}
+
+message ProductModel{
+
+    int32  productId=1;
+    string  productName=2;
+
+}
+
+
+message ProductRequest{
+	int32 Id = 1;
+}
+
+message GetProductsRequest {
+	int32 productId=1;
+}
+
+message GetAllRequest {}
+
+
+message SearchRequest {
+	string productName = 1;
+
+}
+
+message ProductResponse{
+	repeated ProductModel product = 1;
+}
