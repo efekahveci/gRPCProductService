@@ -48,6 +48,7 @@ namespace gRPCProductService.Service
                 if (item.ProductName.Contains(request.ProductName.ToLower()))
                 {
                     await responseStream.WriteAsync(item);
+                    await Task.Delay(TimeSpan.FromSeconds(1), context.CancellationToken);
                 }
 
             }
