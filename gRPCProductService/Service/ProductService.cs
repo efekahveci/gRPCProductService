@@ -4,7 +4,7 @@ using ProductProto;
 
 namespace gRPCProductService.Service
 {
-    public class ProductService:Product.ProductBase
+    public class ProductService : Product.ProductBase
     {
 
         private readonly ProductRepository _productRepository;
@@ -16,13 +16,12 @@ namespace gRPCProductService.Service
 
         public override Task<ProductResponse> GetAllProducts(GetAllRequest request, ServerCallContext context)
         {
-
-           
             ProductResponse response = new ProductResponse();
 
             _productRepository.GetProducts().ForEach(x => response.Product.Add(x));
 
             return Task.FromResult(response);
+
         }
 
         public override Task<ProductModel> GetProduct(GetProductsRequest request, ServerCallContext context)
@@ -31,7 +30,12 @@ namespace gRPCProductService.Service
 
             model = _productRepository.GetProducts().FirstOrDefault(x => x.ProductId == request.ProductId);
 
-            return Task.FromResult(model);
+            if (model is not null)
+                return Task.FromResult(model);
+            else
+                throw new RpcException(new Status(StatusCode.NotFound, "Aradığınız ID ile eşleşen ürün bulunmamaktadır."));
+
+
 
         }
 
@@ -45,7 +49,8 @@ namespace gRPCProductService.Service
                 {
                     await responseStream.WriteAsync(item);
                 }
-            }         
+
+            }
 
 
         }
